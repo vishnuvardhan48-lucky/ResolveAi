@@ -1,5 +1,7 @@
 import sys
 import os
+
+# Add parent directory to Python path so 'app' package is found
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import streamlit as st
@@ -7,27 +9,36 @@ from dotenv import load_dotenv
 from app.database import init_db
 from app.data.seed import seed_database
 
+# Load environment variables
 load_dotenv()
+
+# Initialize database and seed if empty
 init_db()
 from app.database import query_one
 if not query_one("SELECT 1 FROM transactions LIMIT 1"):
     seed_database()
 
+# Streamlit page config
 st.set_page_config(page_title="ResolveAI", layout="wide")
+
+# Main UI
 st.title("🧠 ResolveAI")
 st.caption("Real-Time Human-in-the-Loop Exception Resolution Workbench")
 
+# Sidebar navigation
 with st.sidebar:
-    # Replace with your own logo file or URL
-    st.image("https://via.placeholder.com/150x50?text=ResolveAI", use_column_width=True)
+    # Fixed: use_container_width (not use_column_width)
+    st.image("https://via.placeholder.com/150x50?text=ResolveAI", use_container_width=True)
     page = st.radio("Navigation", ["Dashboard", "Exception Queue", "Rules", "Audit Trail"])
 
+# Import UI modules (after sys.path fix they will be found)
 from app.ui.dashboard import render_dashboard
 from app.ui.queue import render_queue
 from app.ui.exception_detail import render_exception_detail
 from app.ui.rules import render_rules
 from app.ui.audit import render_audit
 
+# Page routing
 if page == "Dashboard":
     render_dashboard()
 elif page == "Exception Queue":
