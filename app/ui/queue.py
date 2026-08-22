@@ -39,11 +39,11 @@ def render_queue():
 
             if st.button(f"View Details", key=f"view_{tx.id}"):
                 st.session_state.selected_transaction_id = tx.id
-                st.experimental_rerun()
+                st.rerun()  # <-- FIXED
 
             if allowed and st.button(f"Auto-Resolve Now", key=f"auto_{tx.id}"):
                 reason_text = AIEngine.get_resolution_suggestion(tx, rule_results, confidence)[0]
                 ResolutionService.auto_resolve(tx.id, reason_text, confidence, rule_results)
                 st.success(f"Transaction {tx.transaction_id} auto-resolved.")
                 st.session_state.dashboard_metrics = update_metrics()
-                st.experimental_rerun()
+                st.rerun()  # <-- FIXED

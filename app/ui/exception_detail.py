@@ -77,7 +77,7 @@ def render_exception_detail():
                 st.success("Auto-resolved!")
                 st.session_state.selected_transaction_id = None
                 st.session_state.dashboard_metrics = update_metrics()
-                st.experimental_rerun()
+                st.rerun()  # <-- FIXED
         else:
             st.button("⚡ Auto-Resolve", disabled=True, help=f"Disabled: {reason}")
 
@@ -85,15 +85,15 @@ def render_exception_detail():
         if col_h1.button("✅ Approve", key="approve"):
             ResolutionService.human_resolve(tx.id, "APPROVED", "Human approved", reviewer="user")
             st.success("Approved")
-            st.experimental_rerun()
+            st.rerun()  # <-- FIXED
         if col_h2.button("❌ Reject", key="reject"):
             ResolutionService.human_resolve(tx.id, "REJECTED", "Human rejected", reviewer="user")
             st.success("Rejected")
-            st.experimental_rerun()
+            st.rerun()  # <-- FIXED
         if col_h3.button("⬆ Escalate", key="escalate"):
             ResolutionService.human_resolve(tx.id, "ESCALATED", "Escalated to manager", reviewer="user")
             st.success("Escalated")
-            st.experimental_rerun()
+            st.rerun()  # <-- FIXED
 
     st.markdown("---")
     st.subheader("🤖 AI Assistant (Contextual)")

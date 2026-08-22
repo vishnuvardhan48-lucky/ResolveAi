@@ -51,8 +51,8 @@ def render_dashboard():
     col6.metric("📦 Total", metrics["TOTAL"])
 
     if st.button("Refresh Metrics"):
-        st.rerun()  # Fixed: st.experimental_rerun() → st.rerun()
+        st.rerun()  # ✅ Fixed: replaces experimental_rerun
 
-# For backward compatibility with other files that call update_metrics()
+# Helper function for other modules that call update_metrics()
 def update_metrics():
     return compute_metrics()

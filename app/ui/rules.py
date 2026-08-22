@@ -12,7 +12,7 @@ def render_rules():
             if st.button("Update", key=f"upd_{row['id']}"):
                 execute("UPDATE rules SET enabled=?, severity=?, threshold_value=? WHERE id=?", (1 if enabled else 0, severity, threshold, row['id']))
                 st.success("Rule updated.")
-                st.experimental_rerun()
+                st.rerun()  # <-- FIXED
 
     st.subheader("Auto-Resolution Settings")
     current_threshold = query_one("SELECT value FROM settings WHERE key='confidence_threshold'")['value']
@@ -20,11 +20,11 @@ def render_rules():
     if st.button("Update Threshold"):
         execute("UPDATE settings SET value=? WHERE key='confidence_threshold'", (new_threshold,))
         st.success(f"Threshold updated to {new_threshold}%")
-        st.experimental_rerun()
+        st.rerun()  # <-- FIXED
 
     current_limit = query_one("SELECT value FROM settings WHERE key='auto_resolve_limit'")['value']
     new_limit = st.number_input("Auto-Resolution Amount Limit (₹)", value=float(current_limit), step=1000.0)
     if st.button("Update Limit"):
         execute("UPDATE settings SET value=? WHERE key='auto_resolve_limit'", (new_limit,))
         st.success(f"Limit updated to ₹{new_limit:,.2f}")
-        st.experimental_rerun()
+        st.rerun()  # <-- FIXED
